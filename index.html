@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>简单绘图 - 电脑版/移动端</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div id="top-right-controls" class="floating">
+    <button id="undoBtn">撤销</button>
+    <button id="deleteBtn" disabled>删除</button>
+    <button id="exportBtn">导出图片</button>
+  </div>
+
+  <div id="bottom-toolbar" class="toolbar">
+    <div class="tools">
+      <button data-tool="rect-stroke">矩形框</button>
+      <button data-tool="circle-stroke">圆形框</button>
+      <button data-tool="rect-fill">矩形</button>
+      <button data-tool="circle-fill">圆形</button>
+      <button data-tool="text">文字</button>
+      <button data-tool="line">直线</button>
+      <button data-tool="arrow">箭头</button>
+    </div>
+    <div class="colors">
+
+      <label>填充颜色<input type="color" id="fillColor" value="#0000FF"/></label>
+      <div class="presets">
+        <span>预设：</span>
+        <button class="preset" data-color="#000000" title="#000000"></button>
+        <button class="preset" data-color="#FFFFFF" title="#FFFFFF"></button>
+        <button class="preset" data-color="#FF0000" title="#FF0000"></button>
+        <button class="preset" data-color="#00FF00" title="#00FF00"></button>
+        <button class="preset" data-color="#0000FF" title="#0000FF"></button>
+        <button class="preset" data-color="#FF9900" title="#FF9900"></button>
+        <button class="preset" data-color="#9933FF" title="#9933FF"></button>
+        <button class="preset" data-color="#00CED1" title="#00CED1"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 形状编辑覆盖层 -->
+  <div id="edit-overlay" class="overlay hidden">
+    <button id="btn-move" class="edit-btn move">移动</button>
+    <button id="btn-delete" class="edit-btn delete">删除</button>
+    <button id="btn-resize" class="edit-btn resize">缩放</button>
+  </div>
+
+  <!-- 直线/箭头三点编辑 -->
+  <div id="line-points" class="overlay hidden">
+    <div class="point" id="line-p1"></div>
+    <div class="point" id="line-pm"></div>
+    <div class="point" id="line-p2"></div>
+  </div>
+
+  <!-- 文字编辑弹窗 -->
+  <div id="text-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>编辑文字</h3>
+      <label>内容</label>
+      <textarea id="textContent" rows="4" placeholder="在此输入多行文字"></textarea>
+      <div class="row">
+        <label>字体大小</label>
+        <input id="textSize" type="number" min="12" max="120" step="2" value="24"/>
+        <label>颜色</label>
+        <input id="textColor" type="color" value="#333333"/>
+      </div>
+      <div class="actions">
+        <button id="textConfirm">确定</button>
+        <button id="textCancel">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/history.js"></script>
+  <script src="./js/draw.js"></script>
+</body>
+</html>
