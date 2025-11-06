@@ -4,6 +4,7 @@
   const DPR=window.devicePixelRatio||1;
   const MIN_SIZE=10;
   const topControls=document.getElementById('top-right-controls');
+  const clearBtn=document.getElementById('clearBtn');
   const undoBtn=document.getElementById('undoBtn');
   const deleteBtn=document.getElementById('deleteBtn');
   const exportBtn=document.getElementById('exportBtn');
@@ -96,6 +97,24 @@
 
   fillColorInput.addEventListener('input',e=>{state.colors.fill=e.target.value;state.colors.stroke=e.target.value});
 
+  if(clearBtn){
+    // 清屏功能 - 使用 pointerdown 统一支持鼠标和触摸事件
+    const handleClear=(e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      state.shapes=[];
+      pushHistory();
+      exitEdit();
+      drawAll();
+    };
+    // 只使用 pointerdown，因为它在移动端和桌面端都能正常工作，且不会与 click 重复触发
+    clearBtn.addEventListener('pointerdown',handleClear);
+    // 防止触摸时触发其他事件
+    clearBtn.addEventListener('touchstart',(e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  }
   undoBtn.addEventListener('click',()=>{const snap=AppHistory.undo();if(snap){state.shapes=snap;exitEdit();drawAll()}});
   exportBtn.addEventListener('click',()=>{
     const expCanvas=document.createElement('canvas');
@@ -136,6 +155,8 @@
 
   let startX=0,startY=0;let lastX=0,lastY=0;
   canvas.addEventListener('pointerdown',e=>{
+    // 如果点击的不是 canvas 本身，不处理
+    if(e.target!==canvas)return;
     if(canvas.setPointerCapture) try{canvas.setPointerCapture(e.pointerId)}catch(_){}
     const rect=canvas.getBoundingClientRect();
     const x=e.clientX-rect.left,y=e.clientY-rect.top;
